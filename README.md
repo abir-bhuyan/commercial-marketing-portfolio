@@ -43,11 +43,24 @@ A working Python tool that scans tender feeds and ranks opportunities by a weigh
 
 Run with one command: `pip install -r requirements.txt && python3 scan.py`
 
+### [04 — Marketing Mix Optimiser](./04-marketing-mix-optimiser/)
+
+An offline interactive web app that takes a marketing budget, audience, goal, industry context, timeline, and existing strengths — and outputs a recommended channel mix across twelve B2B channels, projected qualified leads, blended cost-per-lead, projected pipeline ROI, a 90-day execution roadmap, and a sensitivity view. The second piece in this portfolio that deliberately bridges Information Technology to marketing: a problem a marketing operations analyst would normally solve in Excel, rebuilt as a self-explaining tool. Demonstrates:
+
+- Marketing economics literacy (channel CPL, ramp time, minimum viable spend, diminishing returns)
+- Constrained optimisation — two-pass cap-then-floor budget allocation across competing channels
+- Diminishing-returns lead projection (`leads = √(spend / min_spend) × baseline`)
+- Auditable output — every channel allocation comes with a generated rationale
+- Frontend craft — single self-contained HTML file, no framework, no build step, runs offline
+- Honest treatment of limitations (CPL benchmarks, no interaction effects, B2B-calibrated)
+
+Run with zero commands: open `index.html` in any browser. No install, no internet, no API key.
+
 ---
 
 ## How these were produced
 
-The HTML one-pager was hand-coded and rendered to PDF for print-ready output. The PowerPoint deck was generated with `pptxgenjs` to give consistent, brand-aligned slides. Both are editable — the source files are in each project folder so iterations are quick.
+The HTML one-pager was hand-coded and rendered to PDF for print-ready output. The PowerPoint deck was generated with `pptxgenjs` to give consistent, brand-aligned slides. The tender scanner is a small Python package with unit tests. The marketing mix optimiser is a single hand-coded HTML/JavaScript file with no external dependencies. All four projects ship with editable source so iterations are quick.
 
 ---
 
