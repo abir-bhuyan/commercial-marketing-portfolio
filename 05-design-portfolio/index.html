@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abir Bhuyan · Design &amp; Marketing Portfolio</title>
+<meta name="description" content="Commercial & Marketing portfolio — capability collateral, conference activation, B2B campaigns, and marketing tools by Mohammed Habibur Rahman Bhuyan Abir.">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #faf7f2; color: #1a2e3d; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  a { color: #e85d24; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+  /* Masthead */
+  .top { padding: 36px 0 24px; border-bottom: 1.5px solid #0d2538; }
+  .top-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+  .brand { font-family: Georgia, serif; font-size: 28px; font-weight: 700; color: #0d2538; letter-spacing: -0.5px; }
+  .brand .accent { color: #e85d24; }
+  .top-meta { font-size: 11px; letter-spacing: 1.8px; text-transform: uppercase; color: #6a7782; text-align: right; line-height: 1.6; }
+  .top-meta .label { color: #0d2538; font-weight: 600; }
+
+  /* Hero */
+  .hero { padding: 64px 0 56px; border-bottom: 1px solid #d4cabb; }
+  .hero h1 { font-family: Georgia, serif; font-size: 54px; font-weight: 700; color: #0d2538; line-height: 1.05; letter-spacing: -1.5px; max-width: 900px; }
+  .hero h1 em { color: #e85d24; font-style: italic; }
+  .hero .sub { font-size: 16px; color: #2c3e50; margin-top: 22px; max-width: 740px; line-height: 1.6; }
+  .hero .meta-line { margin-top: 30px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: #6a7782; display: flex; flex-wrap: wrap; gap: 18px; }
+  .hero .meta-line span:not(:last-child)::after { content: " ·"; margin-left: 8px; color: #d4cabb; }
+  .hero .meta-line a { color: #e85d24; }
+
+  /* Section title */
+  .section { padding: 56px 0 32px; }
+  .section-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #6a7782; font-weight: 600; padding-bottom: 6px; border-bottom: 1px solid #e85d24; display: inline-block; margin-bottom: 24px; }
+  .section h2 { font-family: Georgia, serif; font-size: 32px; font-weight: 700; color: #0d2538; max-width: 800px; line-height: 1.2; }
+  .section .lede { font-size: 14px; color: #6a7782; max-width: 700px; margin-top: 12px; font-style: italic; }
+
+  /* Project grid */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 40px; }
+  .card { background: white; border: 1px solid #d4cabb; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.18s ease, box-shadow 0.18s ease; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(13,37,56,0.08); }
+  .card .thumb { aspect-ratio: 4 / 3; position: relative; overflow: hidden; border-bottom: 1px solid #e0d8cc; }
+  .card .body { padding: 22px 24px 26px; flex: 1; display: flex; flex-direction: column; }
+  .card .kicker { font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase; color: #e85d24; font-weight: 600; margin-bottom: 8px; }
+  .card h3 { font-family: Georgia, serif; font-size: 22px; color: #0d2538; line-height: 1.22; font-weight: 700; margin-bottom: 10px; }
+  .card p { font-size: 13.5px; color: #2c3e50; line-height: 1.55; margin-bottom: 18px; flex: 1; }
+  .card .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .card .tag { background: #faf7f2; border: 1px solid #e0d8cc; padding: 3px 9px; font-size: 10px; letter-spacing: 0.5px; color: #1a2e3d; }
+  .card .links { display: flex; gap: 14px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; }
+  .card .links a { color: #0d2538; padding-bottom: 2px; border-bottom: 1px solid #e85d24; }
+  .card .links a:hover { color: #e85d24; text-decoration: none; }
+
+  /* Thumb 01: capability one-pager mock */
+  .thumb-01 { background: #faf7f2; padding: 28px; }
+  .thumb-01 .doc { background: white; height: 100%; border: 1px solid #d4cabb; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; font-size: 9px; line-height: 1.3; }
+  .thumb-01 .doc-head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 8px; border-bottom: 1.5px solid #0d2538; }
+  .thumb-01 .doc-brand { font-family: Georgia, serif; font-weight: 700; color: #0d2538; font-size: 12px; }
+  .thumb-01 .doc-brand .a { color: #e85d24; }
+  .thumb-01 .doc-meta { font-size: 7px; color: #6a7782; letter-spacing: 1px; text-transform: uppercase; }
+  .thumb-01 .doc-hero { font-family: Georgia, serif; font-size: 14px; font-weight: 700; color: #0d2538; line-height: 1.15; margin-top: 6px; }
+  .thumb-01 .doc-hero em { color: #e85d24; font-style: italic; }
+  .thumb-01 .doc-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 6px; }
+  .thumb-01 .doc-stat { background: #0d2538; color: #faf7f2; padding: 5px 4px; text-align: center; }
+  .thumb-01 .doc-stat .n { font-family: Georgia, serif; font-size: 11px; font-weight: 700; color: #e85d24; line-height: 1; }
+  .thumb-01 .doc-stat .l { font-size: 5px; letter-spacing: 0.5px; text-transform: uppercase; color: #b8c4cf; margin-top: 1px; }
+  .thumb-01 .doc-lines { display: flex; flex-direction: column; gap: 3px; margin-top: 6px; flex: 1; }
+  .thumb-01 .doc-line { background: #e0d8cc; height: 4px; }
+  .thumb-01 .doc-line.s { width: 70%; }
+  .thumb-01 .doc-line.m { width: 88%; }
+  .thumb-01 .doc-line.l { width: 100%; }
+
+  /* Thumb 02: PowerPoint slide */
+  .thumb-02 { background: #1f4060; padding: 28px; display: flex; align-items: center; justify-content: center; }
+  .thumb-02 .slide { background: white; aspect-ratio: 16 / 9; width: 100%; max-width: 360px; display: flex; flex-direction: column; padding: 16px 20px; box-shadow: 0 8px 18px rgba(0,0,0,0.25); }
+  .thumb-02 .slide-eyebrow { font-size: 7px; letter-spacing: 2px; text-transform: uppercase; color: #e85d24; font-weight: 700; }
+  .thumb-02 .slide-title { font-family: Georgia, serif; font-size: 18px; font-weight: 700; color: #0d2538; line-height: 1.15; margin-top: 6px; }
+  .thumb-02 .slide-title em { color: #e85d24; font-style: italic; }
+  .thumb-02 .slide-body { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; flex: 1; }
+  .thumb-02 .slide-block { background: #faf7f2; padding: 6px; font-size: 7px; color: #2c3e50; line-height: 1.3; border-left: 2px solid #e85d24; }
+  .thumb-02 .slide-block strong { color: #0d2538; display: block; font-size: 8px; margin-bottom: 2px; }
+  .thumb-02 .slide-foot { font-size: 6px; color: #6a7782; letter-spacing: 1px; text-transform: uppercase; padding-top: 6px; border-top: 1px solid #ede5d7; display: flex; justify-content: space-between; }
+
+  /* Thumb 03: LinkedIn campaign tiles */
+  .thumb-03 { background: #e85d24; padding: 28px; display: flex; align-items: center; justify-content: center; }
+  .thumb-03 .tile-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 320px; }
+  .thumb-03 .mini { aspect-ratio: 1 / 1; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; font-size: 7px; line-height: 1.3; box-shadow: 0 6px 14px rgba(0,0,0,0.15); }
+  .thumb-03 .mini-1 { background: #0d2538; color: #faf7f2; }
+  .thumb-03 .mini-2 { background: #faf7f2; color: #0d2538; }
+  .thumb-03 .mini .logo { font-family: Georgia, serif; font-size: 8px; font-weight: 700; }
+  .thumb-03 .mini .logo .a { color: #e85d24; }
+  .thumb-03 .mini .eb { font-size: 5.5px; letter-spacing: 1.5px; text-transform: uppercase; color: #e85d24; font-weight: 600; }
+  .thumb-03 .mini-1 .h { font-family: Georgia, serif; font-size: 13px; line-height: 1.1; font-weight: 700; margin-top: 4px; }
+  .thumb-03 .mini-1 .h em { color: #e85d24; font-style: italic; }
+  .thumb-03 .mini-2 .n { font-family: Georgia, serif; font-size: 30px; color: #e85d24; font-weight: 700; line-height: 1; }
+  .thumb-03 .mini-2 .u { font-family: Georgia, serif; font-size: 11px; color: #0d2538; }
+  .thumb-03 .mini-2 .lab { font-size: 5px; letter-spacing: 1px; text-transform: uppercase; color: #6a7782; margin-top: 2px; }
+  .thumb-03 .mini-2 .claim { font-family: Georgia, serif; font-size: 8px; font-weight: 700; color: #0d2538; line-height: 1.2; margin-top: 3px; }
+
+  /* Thumb 04: Marketing Mix Optimiser */
+  .thumb-04 { background: #faf7f2; padding: 28px; }
+  .thumb-04 .app { background: white; height: 100%; border: 1px solid #d4cabb; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; font-size: 9px; }
+  .thumb-04 .app-head { padding-bottom: 8px; border-bottom: 1.5px solid #0d2538; display: flex; justify-content: space-between; align-items: baseline; }
+  .thumb-04 .app-title { font-family: Georgia, serif; font-size: 12px; font-weight: 700; color: #0d2538; }
+  .thumb-04 .app-title .a { color: #e85d24; }
+  .thumb-04 .app-meta { font-size: 6px; letter-spacing: 1px; text-transform: uppercase; color: #6a7782; }
+  .thumb-04 .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+  .thumb-04 .kpi { padding: 5px 4px; border: 1px solid #e0d8cc; }
+  .thumb-04 .kpi .v { font-family: Georgia, serif; font-size: 11px; font-weight: 700; color: #0d2538; }
+  .thumb-04 .kpi .l { font-size: 5.5px; letter-spacing: 0.5px; text-transform: uppercase; color: #6a7782; margin-top: 1px; }
+  .thumb-04 .bar { display: flex; height: 14px; margin-top: 4px; }
+  .thumb-04 .bar div { flex: 1; }
+  .thumb-04 .bar .b1 { background: #0d2538; flex: 2.7; }
+  .thumb-04 .bar .b2 { background: #2e7d6e; flex: 1.6; }
+  .thumb-04 .bar .b3 { background: #e85d24; flex: 1.2; }
+  .thumb-04 .bar .b4 { background: #b76b3e; flex: 1.0; }
+  .thumb-04 .bar .b5 { background: #4a3f6b; flex: 0.9; }
+  .thumb-04 .bar .b6 { background: #6a7782; flex: 0.6; }
+  .thumb-04 .app-rows { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .thumb-04 .row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dotted #e0d8cc; font-size: 8px; }
+  .thumb-04 .row .name { color: #0d2538; font-weight: 600; }
+  .thumb-04 .row .val { color: #e85d24; font-weight: 600; }
+
+  /* Highlight card variant for first card */
+  .card.highlight .thumb { background: #0d2538; }
+
+  /* Contact / footer */
+  .contact { background: #0d2538; color: #faf7f2; padding: 64px 0; margin-top: 64px; }
+  .contact .wrap { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+  .contact h2 { font-family: Georgia, serif; font-size: 32px; line-height: 1.2; max-width: 580px; }
+  .contact h2 em { color: #e85d24; font-style: italic; }
+  .contact .right { font-size: 13px; line-height: 1.7; text-align: right; }
+  .contact .right a { color: #faf7f2; text-decoration: underline; text-decoration-color: #e85d24; text-underline-offset: 3px; }
+  .contact .right strong { font-family: Georgia, serif; font-size: 15px; color: #faf7f2; display: block; margin-bottom: 6px; }
+
+  footer { padding: 24px 0; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #6a7782; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; }
+
+  @media (max-width: 760px) {
+    .hero h1 { font-size: 36px; }
+    .grid { grid-template-columns: 1fr; }
+    .contact h2 { font-size: 24px; }
+    .contact .right { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-row">
+    <div class="brand">Abir Bhuyan <span class="accent">/</span> Portfolio</div>
+    <div class="top-meta">
+      <div class="label">Commercial &amp; Marketing</div>
+      <div>Perth · Vacation 2026/27</div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Marketing collateral, B2B campaigns, and the <em>quiet tools</em> that make a small commercial team faster.</h1>
+    <p class="sub">A portfolio of four self-initiated projects for fictional Perth-based offshore-services companies — produced as design samples for the Fugro Vacation Student — Commercial &amp; Marketing role.</p>
+    <div class="meta-line">
+      <span>Mohammed Habibur Rahman Bhuyan Abir</span>
+      <span>BIS · Murdoch University</span>
+      <span>Graduating Nov 2026</span>
+      <span><a href="https://github.com/abir-bhuyan/commercial-marketing-portfolio">github.com/abir-bhuyan/commercial-marketing-portfolio</a></span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-label">Selected Work · Four Projects</div>
+    <h2>Three pieces built around the day-to-day of a B2B marketing team — one piece that bridges marketing and technical thinking.</h2>
+    <p class="lede">All four sit in a single fictional brand world (Perth-based subsea integrity services) so the portfolio reads as a connected body of work, not four disconnected one-offs.</p>
+
+    <div class="grid">
+
+      <!-- 01: Capability One-Pager -->
+      <article class="card">
+        <div class="thumb thumb-01">
+          <div class="doc">
+            <div class="doc-head">
+              <div class="doc-brand">Subsea Solutions <span class="a">·</span></div>
+              <div class="doc-meta">Capability · 2026</div>
+            </div>
+            <div class="doc-hero">Perth-based subsea integrity, on <em>48-hour</em> mobilisation.</div>
+            <div class="doc-stats">
+              <div class="doc-stat"><div class="n">48h</div><div class="l">Mobilise</div></div>
+              <div class="doc-stat"><div class="n">11d</div><div class="l">Avg campaign</div></div>
+              <div class="doc-stat"><div class="n">0</div><div class="l">LTI 2025</div></div>
+              <div class="doc-stat"><div class="n">100%</div><div class="l">WA-local</div></div>
+            </div>
+            <div class="doc-lines">
+              <div class="doc-line l"></div>
+              <div class="doc-line m"></div>
+              <div class="doc-line l"></div>
+              <div class="doc-line s"></div>
+            </div>
+          </div>
+        </div>
+        <div class="body">
+          <div class="kicker">Project 01 · Capability Collateral</div>
+          <h3>Subsea Solutions — Capability One-Pager</h3>
+          <p>A print-ready A4 one-pager designed to support tender responses and BD conversations. Editorial layout, four-stat hero strip, service summary, contact block. Designed in a Canva-equivalent style — importable for further editing.</p>
+          <div class="tags">
+            <span class="tag">Tender support</span>
+            <span class="tag">Print + digital</span>
+            <span class="tag">A4 PDF</span>
+          </div>
+          <div class="links">
+            <a href="https://github.com/abir-bhuyan/commercial-marketing-portfolio/tree/main/01-capability-one-pager">View files →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 02: Conference Activation -->
+      <article class="card">
+        <div class="thumb thumb-02">
+          <div class="slide">
+            <div class="slide-eyebrow">AOG 2026 · Activation Plan</div>
+            <div class="slide-title">Five days to a <em>32-meeting</em> booth.</div>
+            <div class="slide-body">
+              <div class="slide-block"><strong>Objectives</strong>20 booked meetings · 4 tender shortlists · 12 demos</div>
+              <div class="slide-block"><strong>Audience</strong>Integrity managers · Tendering leads · EPC procurement</div>
+              <div class="slide-block"><strong>Booth concept</strong>Live ROV feed · printed case study series · whiteboard Q&amp;A</div>
+              <div class="slide-block"><strong>Budget</strong>$28,400 all-in · 6.2× est. ROI on shortlists</div>
+            </div>
+            <div class="slide-foot"><span>Slide 02 / 05</span><span>Meridian Offshore</span></div>
+          </div>
+        </div>
+        <div class="body">
+          <div class="kicker">Project 02 · Conference Activation</div>
+          <h3>Meridian Offshore — AOG 2026 Plan</h3>
+          <p>Native PowerPoint deck (5 slides) plus a one-page supporting brief. Objectives, audience, booth concept, lead-capture workflow, budget, and post-event measurement. Built to be opened and edited in PowerPoint by a marketing team.</p>
+          <div class="tags">
+            <span class="tag">Conference</span>
+            <span class="tag">PowerPoint</span>
+            <span class="tag">+1-page brief</span>
+          </div>
+          <div class="links">
+            <a href="https://github.com/abir-bhuyan/commercial-marketing-portfolio/tree/main/02-conference-activation-plan">View files →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 03: LinkedIn Campaign -->
+      <article class="card">
+        <div class="thumb thumb-03">
+          <div class="tile-pair">
+            <div class="mini mini-1">
+              <div>
+                <div class="logo">Subsea Solutions <span class="a">·</span></div>
+                <div class="eb" style="margin-top: 6px;">Wk 1 · Launch</div>
+                <div class="h">A <em>deeper</em> standard for subsea integrity.</div>
+              </div>
+              <div style="font-size: 5px; color: rgba(255,255,255,0.5);">#DeeperStandard</div>
+            </div>
+            <div class="mini mini-2">
+              <div>
+                <div class="logo">Subsea Solutions <span class="a">·</span></div>
+                <div class="eb" style="margin-top: 6px;">Mobilisation</div>
+              </div>
+              <div>
+                <div><span class="n">48</span><span class="u">hrs</span></div>
+                <div class="lab">PO to deck</div>
+                <div class="claim">If your vendor can't mobilise in 48 hrs, anomaly becomes shutdown.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="body">
+          <div class="kicker">Project 03 · B2B Campaign System</div>
+          <h3>The Deeper Standard — 12-week LinkedIn campaign</h3>
+          <p>Integrated 12-week B2B campaign for a fictional subsea integrity firm. Five deliverables: campaign brief, brand mini-guide + paid ads pack, 12-week content calendar, 4-email nurture sequence, and 6 designed LinkedIn post tiles with production notes.</p>
+          <div class="tags">
+            <span class="tag">LinkedIn campaign</span>
+            <span class="tag">Email sequence</span>
+            <span class="tag">5 PDFs</span>
+          </div>
+          <div class="links">
+            <a href="https://github.com/abir-bhuyan/commercial-marketing-portfolio/tree/main/03-linkedin-b2b-campaign">View files →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 04: Marketing Mix Optimiser -->
+      <article class="card">
+        <div class="thumb thumb-04">
+          <div class="app">
+            <div class="app-head">
+              <div class="app-title">Marketing Mix <span class="a">Optimiser</span></div>
+              <div class="app-meta">$75k · 16 wks · B2B</div>
+            </div>
+            <div class="kpis">
+              <div class="kpi"><div class="v">$75k</div><div class="l">Allocated</div></div>
+              <div class="kpi"><div class="v">273</div><div class="l">Q. leads</div></div>
+              <div class="kpi"><div class="v">$275</div><div class="l">Blended CPL</div></div>
+              <div class="kpi"><div class="v">+482%</div><div class="l">Pipeline ROI</div></div>
+            </div>
+            <div class="bar">
+              <div class="b1"></div><div class="b2"></div><div class="b3"></div>
+              <div class="b4"></div><div class="b5"></div><div class="b6"></div>
+            </div>
+            <div class="app-rows">
+              <div class="row"><span class="name">01 LinkedIn Sponsored</span><span class="val">$20k · 27%</span></div>
+              <div class="row"><span class="name">02 ABM</span><span class="val">$12k · 16%</span></div>
+              <div class="row"><span class="name">03 Capability collateral</span><span class="val">$9k · 12%</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="body">
+          <div class="kicker">Project 04 · Bridge Piece</div>
+          <h3>Marketing Mix Optimiser — interactive planning tool</h3>
+          <p>An offline browser tool that allocates a marketing budget across 12 B2B channels — projected leads, blended CPL, pipeline ROI, 90-day roadmap, sensitivity view. Two-pass constrained allocator with diminishing-returns lead projection. The one piece that bridges my IT background to marketing economics.</p>
+          <div class="tags">
+            <span class="tag">Interactive tool</span>
+            <span class="tag">B2B planning</span>
+            <span class="tag">Runs offline</span>
+          </div>
+          <div class="links">
+            <a href="https://github.com/abir-bhuyan/commercial-marketing-portfolio/tree/main/04-marketing-mix-optimiser">View files →</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="contact">
+  <div class="wrap">
+    <h2>Looking for a 2026/27 vacation student who can <em>actually</em> ship marketing work?</h2>
+    <div class="right">
+      <strong>Mohammed Habibur Rahman Bhuyan Abir</strong>
+      <a href="mailto:habiburrahmanabeer@gmail.com">habiburrahmanabeer@gmail.com</a><br>
+      <a href="tel:+61480715703">0480 715 703</a><br>
+      <a href="https://www.linkedin.com/in/abir-bhuyan">linkedin.com/in/abir-bhuyan</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>Hosted on GitHub Pages · Built without a framework</div>
+    <div>© 2026 · Portfolio for Fugro Vacation Program application</div>
+  </div>
+</footer>
+
+</body>
+</html>
