@@ -23,9 +23,9 @@ The four projects sit in a single connected brand world (Subsea Solutions and Me
 | # | Project | Type | Format |
 |---|---|---|---|
 | 01 | Capability One-Pager | Fully marketing | A4 PDF + HTML source |
-| 02 | AOG 2026 Conference Activation Plan | Fully marketing | PowerPoint deck + 1-page brief |
-| 03 | LinkedIn B2B Campaign — *The Deeper Standard* | Fully marketing | 5 designed PDFs (campaign brief, brand + ads, calendar, email sequence, post pack) |
-| 04 | Marketing Mix Optimiser | IT-to-marketing bridge | Interactive offline web app |
+| 02 | AOG 2026 Conference Activation Plan | Marketing | PowerPoint deck + 1-page brief |
+| 03 | LinkedIn B2B Campaign — *The Deeper Standard* | Marketing | 5 designed PDFs (campaign brief, brand + ads, calendar, email sequence, post pack) |
+| 04 | Marketing Mix Optimiser | IT-to-Marketing | Interactive offline web app |
 | 05 | Design Portfolio Landing Page | Viewing surface | Single-file HTML for GitHub Pages |
 
 ---
@@ -82,8 +82,6 @@ Run with zero commands: open `index.html` in any browser.
 ### [05 — Design Portfolio Landing Page](./05-design-portfolio/)
 
 A single-file HTML landing page that serves as the public viewing surface for the four projects above. Built for GitHub Pages, this is the URL a recruiter visits to see the work as designed thumbnails rather than a folder of files. Not listed as a project on the CV — it's the front door, not a deliverable.
-
-After enabling Pages: [abir-bhuyan.github.io/commercial-marketing-portfolio/05-design-portfolio/](https://abir-bhuyan.github.io/commercial-marketing-portfolio/05-design-portfolio/)
 
 ---
 
