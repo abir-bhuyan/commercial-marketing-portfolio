@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing Mix Optimiser — B2B Channel Allocation Tool</title>
+<style>
+  /* ---------- Design tokens ---------- */
+  :root {
+    --ink:        #0d2538;
+    --ink-2:      #1a3a52;
+    --ink-3:      #3d566e;
+    --paper:      #faf7f2;
+    --paper-2:    #f2ece3;
+    --paper-3:    #e8ddca;
+    --rule:       #d9cdb6;
+    --coral:      #e85d24;
+    --coral-2:    #c84a16;
+    --sand:       #f5ead4;
+    --teal:       #1f7a6e;
+    --teal-2:     #145a51;
+    --muted:      #6b6358;
+    --serif:      Georgia, "Iowan Old Style", "Times New Roman", Times, serif;
+    --sans:       "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono:       "SF Mono", Menlo, "Consolas", "Liberation Mono", monospace;
+  }
+
+  /* ---------- Base ---------- */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  body { min-height: 100vh; }
+
+  /* ---------- Masthead ---------- */
+  .masthead {
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+    padding: 22px 36px 18px;
+  }
+  .masthead-row {
+    display: flex; align-items: baseline; justify-content: space-between;
+    max-width: 1480px; margin: 0 auto;
+  }
+  .brand {
+    font-family: var(--serif); font-size: 22px; font-weight: 700;
+    letter-spacing: -0.01em; color: var(--ink);
+  }
+  .brand .accent { color: var(--coral); }
+  .masthead-meta {
+    font-family: var(--mono); font-size: 10.5px; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--muted);
+  }
+  .strap {
+    max-width: 1480px; margin: 8px auto 0; color: var(--ink-3);
+    font-size: 13px; font-style: italic; font-family: var(--serif);
+  }
+
+  /* ---------- Layout ---------- */
+  .app {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    max-width: 1480px;
+    margin: 0 auto;
+    min-height: calc(100vh - 70px);
+  }
+
+  /* ---------- Input panel ---------- */
+  .panel {
+    background: var(--paper-2);
+    border-right: 1px solid var(--rule);
+    padding: 24px 24px 40px;
+    position: sticky; top: 0;
+    align-self: start;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+  .panel-title {
+    font-family: var(--mono); font-size: 10.5px; text-transform: uppercase;
+    letter-spacing: 0.14em; color: var(--ink); font-weight: 700;
+    border-bottom: 1px solid var(--ink); padding-bottom: 6px; margin-bottom: 18px;
+  }
+  .field { margin-bottom: 22px; }
+  .field-label {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-2); margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .field-value {
+    font-family: var(--serif); font-size: 18px; color: var(--ink);
+    font-weight: 700; letter-spacing: -0.01em;
+  }
+  .field-value-sub { font-size: 11px; color: var(--muted); font-family: var(--sans); font-style: italic; font-weight: 400; }
+
+  /* Slider */
+  input[type=range] {
+    width: 100%; -webkit-appearance: none; appearance: none;
+    background: transparent; height: 22px; cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    height: 2px; background: var(--ink-3); border-radius: 0;
+  }
+  input[type=range]::-moz-range-track {
+    height: 2px; background: var(--ink-3); border-radius: 0;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--coral); margin-top: -7px;
+    border: 2px solid var(--paper-2);
+    box-shadow: 0 0 0 1px var(--coral);
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--coral); border: 2px solid var(--paper-2);
+    box-shadow: 0 0 0 1px var(--coral);
+  }
+
+  /* Radio buttons styled as chips */
+  .chip-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip-group input { display: none; }
+  .chip-group label {
+    padding: 7px 10px; border: 1px solid var(--rule);
+    background: var(--paper); cursor: pointer;
+    font-size: 12px; color: var(--ink-3);
+    transition: all 0.12s ease;
+    border-radius: 2px;
+    user-select: none;
+  }
+  .chip-group label:hover {
+    border-color: var(--ink-2); color: var(--ink);
+  }
+  .chip-group input:checked + label {
+    background: var(--ink); color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  /* Select */
+  select {
+    width: 100%; padding: 9px 10px; font-size: 13px;
+    border: 1px solid var(--rule); background: var(--paper);
+    color: var(--ink); font-family: var(--sans);
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%230d2538' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center;
+    padding-right: 28px;
+    cursor: pointer;
+  }
+  select:focus { outline: 2px solid var(--coral); outline-offset: 1px; }
+
+  /* Checkbox list */
+  .check-list { display: flex; flex-direction: column; gap: 4px; }
+  .check-list label {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 8px; cursor: pointer; font-size: 12.5px;
+    color: var(--ink-3); border-radius: 2px;
+  }
+  .check-list label:hover { background: var(--paper-3); color: var(--ink); }
+  .check-list input[type=checkbox] {
+    appearance: none; -webkit-appearance: none;
+    width: 14px; height: 14px;
+    border: 1.5px solid var(--ink-3); background: var(--paper);
+    display: grid; place-content: center; cursor: pointer;
+    border-radius: 2px;
+  }
+  .check-list input[type=checkbox]:checked {
+    background: var(--ink); border-color: var(--ink);
+  }
+  .check-list input[type=checkbox]:checked::before {
+    content: ""; width: 6px; height: 3px;
+    border-left: 2px solid var(--paper);
+    border-bottom: 2px solid var(--paper);
+    transform: rotate(-45deg) translateY(-1px);
+  }
+
+  /* ---------- Output area ---------- */
+  .output {
+    padding: 28px 36px 80px;
+    min-width: 0;
+  }
+  .section-title {
+    font-family: var(--mono); font-size: 10.5px; text-transform: uppercase;
+    letter-spacing: 0.14em; color: var(--ink); font-weight: 700;
+    border-bottom: 1px solid var(--ink); padding-bottom: 6px;
+    margin: 28px 0 16px;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .section-title:first-child { margin-top: 0; }
+  .section-title .meta { font-weight: 400; color: var(--muted); font-family: var(--sans); text-transform: none; letter-spacing: 0; font-size: 11px; font-style: italic; }
+
+  /* KPI strip */
+  .kpi-strip {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    border: 1px solid var(--ink); margin-bottom: 8px;
+  }
+  .kpi {
+    padding: 16px 18px;
+    border-right: 1px solid var(--rule);
+    background: var(--paper);
+  }
+  .kpi:last-child { border-right: 0; }
+  .kpi-label {
+    font-family: var(--mono); font-size: 9.5px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px;
+  }
+  .kpi-value {
+    font-family: var(--serif); font-size: 28px; color: var(--ink);
+    font-weight: 700; letter-spacing: -0.02em; line-height: 1;
+  }
+  .kpi-sub { font-size: 11px; color: var(--ink-3); margin-top: 4px; font-style: italic; font-family: var(--serif); }
+
+  /* Mix bar (stacked horizontal) */
+  .mix-bar-wrap { margin-bottom: 8px; }
+  .mix-bar {
+    display: flex; height: 36px; border: 1px solid var(--ink);
+    overflow: hidden; margin-bottom: 8px;
+  }
+  .mix-seg {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--paper); font-size: 11px; font-weight: 700;
+    font-family: var(--mono);
+    border-right: 1px solid rgba(255,255,255,0.25);
+    overflow: hidden;
+    transition: background 0.15s ease;
+  }
+  .mix-seg:last-child { border-right: 0; }
+  .mix-seg:hover { filter: brightness(1.08); }
+  .mix-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 11px; color: var(--ink-3); }
+  .mix-legend-item { display: flex; align-items: center; gap: 6px; }
+  .mix-legend-swatch { width: 10px; height: 10px; border: 1px solid rgba(0,0,0,0.2); }
+
+  /* Channel cards */
+  .channels { display: grid; grid-template-columns: 1fr; gap: 0; border-top: 1px solid var(--rule); }
+  .channel-card {
+    display: grid;
+    grid-template-columns: 36px 1.6fr 1fr 1.4fr;
+    gap: 16px; padding: 14px 4px;
+    border-bottom: 1px solid var(--rule);
+    align-items: start;
+  }
+  .channel-rank {
+    font-family: var(--serif); font-size: 22px; color: var(--coral);
+    font-weight: 700; line-height: 1;
+  }
+  .channel-name {
+    font-family: var(--serif); font-size: 16px; font-weight: 700;
+    color: var(--ink); letter-spacing: -0.01em; margin-bottom: 4px;
+  }
+  .channel-tag {
+    display: inline-block; padding: 1px 6px;
+    background: var(--sand); color: var(--ink); border: 1px solid var(--paper-3);
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.08em;
+    text-transform: uppercase; margin-right: 4px;
+  }
+  .channel-alloc { text-align: right; }
+  .channel-alloc-amount {
+    font-family: var(--serif); font-size: 22px; color: var(--ink);
+    font-weight: 700; letter-spacing: -0.01em; line-height: 1.1;
+  }
+  .channel-alloc-pct {
+    font-family: var(--mono); font-size: 10.5px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px;
+  }
+  .channel-meta {
+    font-size: 11.5px; color: var(--ink-3); line-height: 1.45;
+    font-family: var(--serif);
+  }
+  .channel-meta strong { color: var(--ink); font-weight: 700; font-family: var(--sans); font-size: 11px; }
+  .channel-rationale {
+    font-size: 12px; color: var(--ink-2); line-height: 1.5;
+    border-left: 2px solid var(--coral); padding-left: 10px;
+    font-family: var(--serif);
+  }
+
+  /* Roadmap */
+  .roadmap {
+    border: 1px solid var(--ink); background: var(--paper);
+  }
+  .roadmap-row {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    border-bottom: 1px solid var(--rule);
+  }
+  .roadmap-row:last-child { border-bottom: 0; }
+  .roadmap-phase {
+    background: var(--ink); color: var(--paper);
+    padding: 14px 14px;
+    font-family: var(--mono); font-size: 10.5px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    display: flex; flex-direction: column; justify-content: center;
+    white-space: nowrap;
+  }
+  .roadmap-phase .weeks { font-size: 20px; font-family: var(--serif); font-weight: 700; letter-spacing: -0.02em; margin-top: 2px; white-space: nowrap; }
+  .roadmap-actions {
+    padding: 12px 14px;
+    font-family: var(--serif); font-size: 13px; color: var(--ink);
+    line-height: 1.5;
+  }
+  .roadmap-actions li {
+    list-style: none; padding: 3px 0 3px 14px; position: relative;
+  }
+  .roadmap-actions li::before {
+    content: "▸"; position: absolute; left: 0; color: var(--coral); font-size: 11px;
+  }
+
+  /* Sensitivity panel */
+  .sensitivity {
+    background: var(--ink); color: var(--paper);
+    padding: 24px 28px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
+  }
+  .sens-block .sens-label {
+    font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.14em; color: var(--coral); margin-bottom: 8px;
+  }
+  .sens-block .sens-headline {
+    font-family: var(--serif); font-size: 24px; color: var(--paper);
+    font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 10px;
+  }
+  .sens-block .sens-detail {
+    font-size: 12px; color: var(--paper-2); line-height: 1.55;
+    font-family: var(--serif);
+  }
+  .sens-block .sens-detail .num { color: var(--coral); font-weight: 700; }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center; padding: 80px 20px;
+    color: var(--muted); font-family: var(--serif); font-style: italic;
+  }
+  .empty-state .big { font-size: 28px; color: var(--ink-3); margin-bottom: 12px; font-style: normal; }
+
+  /* Footer note */
+  .footer-note {
+    margin-top: 40px; padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--serif); font-size: 11.5px; color: var(--muted);
+    font-style: italic; line-height: 1.6;
+  }
+  .footer-note strong { color: var(--ink); font-style: normal; font-family: var(--sans); font-weight: 700; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* Print */
+  @media print {
+    .panel { position: static; max-height: none; }
+    .app { grid-template-columns: 1fr; }
+    .panel { display: none; }
+  }
+
+  @media (max-width: 900px) {
+    .app { grid-template-columns: 1fr; }
+    .panel { position: static; max-height: none; }
+    .channel-card { grid-template-columns: 28px 1fr; }
+    .channel-alloc, .channel-rationale { grid-column: 2; text-align: left; }
+    .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+    .kpi:nth-child(2) { border-right: 0; }
+    .kpi:nth-child(1), .kpi:nth-child(2) { border-bottom: 1px solid var(--rule); }
+    .sensitivity { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-row">
+    <div class="brand">Marketing Mix <span class="accent">Optimiser</span></div>
+    <div class="masthead-meta">B2B Channel Allocation · AUD · v1.0</div>
+  </div>
+  <p class="strap">A planning tool for marketing leads who need to allocate a finite budget across channels and explain the reasoning.</p>
+</header>
+
+<div class="app">
+
+  <!-- ============ INPUT PANEL ============ -->
+  <aside class="panel" id="panel">
+
+    <div class="panel-title">Plan Inputs</div>
+
+    <div class="field">
+      <div class="field-label">
+        <span>Annual marketing budget</span>
+        <span class="field-value" id="budgetDisplay">$50,000</span>
+      </div>
+      <input type="range" id="budget" min="5000" max="500000" step="2500" value="50000">
+      <div class="field-value-sub">Drag to set your total spend envelope</div>
+    </div>
+
+    <div class="field">
+      <div class="field-label"><span>Primary audience</span></div>
+      <div class="chip-group" id="audience">
+        <input type="radio" name="audience" id="aud-b2b" value="b2b" checked><label for="aud-b2b">B2B</label>
+        <input type="radio" name="audience" id="aud-mixed" value="mixed"><label for="aud-mixed">Mixed</label>
+        <input type="radio" name="audience" id="aud-b2c" value="b2c"><label for="aud-b2c">B2C</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label"><span>Primary goal</span></div>
+      <div class="chip-group" id="goal">
+        <input type="radio" name="goal" id="goal-leadgen" value="leadgen" checked><label for="goal-leadgen">Lead gen</label>
+        <input type="radio" name="goal" id="goal-brand" value="brand"><label for="goal-brand">Brand</label>
+        <input type="radio" name="goal" id="goal-event" value="event"><label for="goal-event">Event push</label>
+        <input type="radio" name="goal" id="goal-retention" value="retention"><label for="goal-retention">Retention</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label"><span>Industry context</span></div>
+      <select id="industry">
+        <option value="offshore">Offshore / Subsea services</option>
+        <option value="industrial">Industrial services (mining, energy)</option>
+        <option value="prof_services">Professional services (consulting, engineering)</option>
+        <option value="tech">Technology / SaaS</option>
+        <option value="retail">Retail / Consumer goods</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <div class="field-label">
+        <span>Timeline until results needed</span>
+        <span class="field-value" id="timelineDisplay">12 weeks</span>
+      </div>
+      <input type="range" id="timeline" min="2" max="52" step="1" value="12">
+      <div class="field-value-sub">Channels with longer ramp times are deprioritised</div>
+    </div>
+
+    <div class="field">
+      <div class="field-label"><span>Existing strengths (optional)</span></div>
+      <div class="check-list" id="strengths">
+        <label><input type="checkbox" value="linkedin"> Strong LinkedIn presence</label>
+        <label><input type="checkbox" value="crm"> Established CRM / client list</label>
+        <label><input type="checkbox" value="content"> Existing content library</label>
+        <label><input type="checkbox" value="referrals"> Active referral network</label>
+        <label><input type="checkbox" value="brand"> Recognised brand in sector</label>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ============ OUTPUT AREA ============ -->
+  <main class="output" id="output">
+    <!-- Rendered by JS -->
+  </main>
+
+</div>
+
+<script>
+/* =============================================================
+   MARKETING MIX OPTIMISER
+   ---
+   A working B2B marketing-budget allocation engine.
+   All numbers are calibrated to the Australian market (AUD).
+   Industry benchmarks drawn from publicly available CPL ranges
+   (HubSpot State of Marketing, LinkedIn Marketing benchmarks,
+    AAMA media planning rates).
+   ============================================================= */
+
+/* -------------------------------------------------------------
+   CHANNEL CATALOG
+   Each channel has:
+     - minSpend:   below this, the channel can't run
+     - cpl:        cost-per-qualified-lead (AUD)
+     - rampWeeks:  weeks to first measurable result
+     - maxShare:   max % of total budget (concentration cap)
+     - colour:     for the mix bar
+     - fit{ audience, goal, industry }: 0.0–1.0 fit scores
+   ------------------------------------------------------------- */
+const CHANNELS = [
+  {
+    slug: 'conference', name: 'Industry Conference Exhibition',
+    minSpend: 22000, cpl: 580, rampWeeks: 8, maxShare: 0.45,
+    colour: '#0d2538',
+    fit: {
+      audience: { b2b: 0.95, mixed: 0.65, b2c: 0.2 },
+      goal:     { leadgen: 0.75, brand: 0.95, event: 1.0, retention: 0.45 },
+      industry: { offshore: 0.95, industrial: 0.9, prof_services: 0.75, tech: 0.6, retail: 0.35 }
+    },
+    summary: 'Booth, collateral, staff time and post-event follow-up at a sector trade show.'
+  },
+  {
+    slug: 'linkedin_ads', name: 'LinkedIn Sponsored Content',
+    minSpend: 2500, cpl: 135, rampWeeks: 1, maxShare: 0.30,
+    colour: '#1a3a52',
+    fit: {
+      audience: { b2b: 0.95, mixed: 0.7, b2c: 0.3 },
+      goal:     { leadgen: 0.95, brand: 0.7, event: 0.7, retention: 0.55 },
+      industry: { offshore: 0.85, industrial: 0.85, prof_services: 0.9, tech: 0.9, retail: 0.45 }
+    },
+    summary: 'Targeted paid posts by job title, industry and seniority — fastest B2B lead source.'
+  },
+  {
+    slug: 'capability', name: 'Capability Statements & Tender Collateral',
+    minSpend: 3500, cpl: null, rampWeeks: 3, maxShare: 0.20,
+    colour: '#e85d24',
+    fit: {
+      audience: { b2b: 0.95, mixed: 0.7, b2c: 0.05 },
+      goal:     { leadgen: 0.85, brand: 0.75, event: 0.45, retention: 0.6 },
+      industry: { offshore: 0.98, industrial: 0.95, prof_services: 0.9, tech: 0.55, retail: 0.1 }
+    },
+    summary: 'Branded one-pagers, capability statements and tender-ready collateral. Enabler — no direct leads but multiplies every other channel.',
+    isEnabler: true
+  },
+  {
+    slug: 'abm', name: 'Account-Based Marketing (ABM)',
+    minSpend: 6000, cpl: 380, rampWeeks: 4, maxShare: 0.30,
+    colour: '#1f7a6e',
+    fit: {
+      audience: { b2b: 0.95, mixed: 0.5, b2c: 0.05 },
+      goal:     { leadgen: 0.95, brand: 0.6, event: 0.5, retention: 0.85 },
+      industry: { offshore: 0.85, industrial: 0.85, prof_services: 0.85, tech: 0.95, retail: 0.2 }
+    },
+    summary: 'A short list of named target accounts pursued with bespoke messaging, gifts, and personalised outreach.'
+  },
+  {
+    slug: 'content', name: 'Content Marketing & SEO',
+    minSpend: 3000, cpl: 65, rampWeeks: 12, maxShare: 0.25,
+    colour: '#3d566e',
+    fit: {
+      audience: { b2b: 0.85, mixed: 0.85, b2c: 0.7 },
+      goal:     { leadgen: 0.75, brand: 0.85, event: 0.3, retention: 0.75 },
+      industry: { offshore: 0.7, industrial: 0.75, prof_services: 0.9, tech: 0.95, retail: 0.7 }
+    },
+    summary: 'Blog posts, case studies and SEO-targeted technical articles that compound over time.'
+  },
+  {
+    slug: 'email', name: 'Email Marketing & Nurture',
+    minSpend: 1000, cpl: 45, rampWeeks: 2, maxShare: 0.15,
+    colour: '#c84a16',
+    fit: {
+      audience: { b2b: 0.85, mixed: 0.85, b2c: 0.85 },
+      goal:     { leadgen: 0.65, brand: 0.5, event: 0.75, retention: 0.95 },
+      industry: { offshore: 0.7, industrial: 0.8, prof_services: 0.9, tech: 0.9, retail: 0.85 }
+    },
+    summary: 'Newsletter, drip campaigns and event-based nurture against an existing list.'
+  },
+  {
+    slug: 'trade_pub', name: 'Trade Publication Advertising',
+    minSpend: 4500, cpl: 420, rampWeeks: 4, maxShare: 0.15,
+    colour: '#6b6358',
+    fit: {
+      audience: { b2b: 0.85, mixed: 0.55, b2c: 0.15 },
+      goal:     { leadgen: 0.5, brand: 0.85, event: 0.7, retention: 0.4 },
+      industry: { offshore: 0.85, industrial: 0.9, prof_services: 0.6, tech: 0.55, retail: 0.4 }
+    },
+    summary: 'Display ads and advertorials in sector-specific publications (Australasian Oil & Gas, AustralianMining, etc.).'
+  },
+  {
+    slug: 'webinar', name: 'Webinar Series',
+    minSpend: 2000, cpl: 110, rampWeeks: 4, maxShare: 0.15,
+    colour: '#145a51',
+    fit: {
+      audience: { b2b: 0.85, mixed: 0.7, b2c: 0.35 },
+      goal:     { leadgen: 0.85, brand: 0.75, event: 0.7, retention: 0.7 },
+      industry: { offshore: 0.7, industrial: 0.75, prof_services: 0.9, tech: 0.95, retail: 0.4 }
+    },
+    summary: 'A 3–6-part webinar series positioning your team as the technical authority in the niche.'
+  },
+  {
+    slug: 'direct_mail', name: 'Executive Direct Mail',
+    minSpend: 3500, cpl: 280, rampWeeks: 3, maxShare: 0.10,
+    colour: '#3d2818',
+    fit: {
+      audience: { b2b: 0.85, mixed: 0.4, b2c: 0.1 },
+      goal:     { leadgen: 0.75, brand: 0.55, event: 0.6, retention: 0.7 },
+      industry: { offshore: 0.75, industrial: 0.75, prof_services: 0.85, tech: 0.55, retail: 0.15 }
+    },
+    summary: 'Premium physical packs to a short list of decision-makers — high cut-through in cluttered inboxes.'
+  },
+  {
+    slug: 'google_ads', name: 'Google Search Ads',
+    minSpend: 1500, cpl: 185, rampWeeks: 1, maxShare: 0.20,
+    colour: '#8a6a3b',
+    fit: {
+      audience: { b2b: 0.7, mixed: 0.85, b2c: 0.95 },
+      goal:     { leadgen: 0.9, brand: 0.4, event: 0.5, retention: 0.3 },
+      industry: { offshore: 0.55, industrial: 0.65, prof_services: 0.75, tech: 0.85, retail: 0.95 }
+    },
+    summary: 'Pay-per-click on high-intent search queries — bottom-of-funnel demand capture.'
+  },
+  {
+    slug: 'pr', name: 'PR & Analyst Relations',
+    minSpend: 5000, cpl: null, rampWeeks: 6, maxShare: 0.15,
+    colour: '#56412a',
+    fit: {
+      audience: { b2b: 0.85, mixed: 0.7, b2c: 0.5 },
+      goal:     { leadgen: 0.3, brand: 0.95, event: 0.65, retention: 0.45 },
+      industry: { offshore: 0.8, industrial: 0.8, prof_services: 0.85, tech: 0.85, retail: 0.65 }
+    },
+    summary: 'Media placements, analyst briefings and earned coverage. Builds credibility — hard to attribute directly to leads.',
+    isEnabler: true
+  },
+  {
+    slug: 'sponsorship', name: 'Industry Body Sponsorship',
+    minSpend: 8000, cpl: 410, rampWeeks: 4, maxShare: 0.15,
+    colour: '#7a3b1f',
+    fit: {
+      audience: { b2b: 0.9, mixed: 0.55, b2c: 0.2 },
+      goal:     { leadgen: 0.55, brand: 0.85, event: 0.85, retention: 0.6 },
+      industry: { offshore: 0.85, industrial: 0.85, prof_services: 0.75, tech: 0.6, retail: 0.35 }
+    },
+    summary: 'Sponsoring a sector association (e.g. APPEA, Subsea Energy Australia) for access to members and events.'
+  }
+];
+
+/* -------------------------------------------------------------
+   STRENGTH MAPPING — which user-declared strengths boost which channels
+   ------------------------------------------------------------- */
+const STRENGTH_BOOST = {
+  linkedin:  { linkedin_ads: 1.25, abm: 1.10, content: 1.05 },
+  crm:       { email: 1.30, abm: 1.15, direct_mail: 1.10 },
+  content:   { content: 1.25, webinar: 1.10, linkedin_ads: 1.05 },
+  referrals: { abm: 1.15, direct_mail: 1.10, sponsorship: 1.05 },
+  brand:     { pr: 1.15, conference: 1.10, sponsorship: 1.10 }
+};
+
+/* =============================================================
+   ALLOCATION ENGINE
+   ---
+   Step 1. Filter   — drop channels we can't afford or that ramp too slowly
+   Step 2. Score    — fit (audience × goal × industry) × strength boost
+                       × CPL efficiency × timeline-fit
+   Step 3. Allocate — proportional share of budget, with min-spend floors
+                       and max-share concentration caps. Iterate until stable.
+   Step 4. Project  — apply diminishing-returns curve to convert $ → leads
+   ============================================================= */
+
+function computeAllocation(inputs) {
+  const { budget, audience, goal, industry, timeline, strengths } = inputs;
+
+  // ---- Step 1: filter ----
+  const eligible = CHANNELS.filter(ch => {
+    if (ch.minSpend > budget * (ch.maxShare * 1.2)) return false;  // can't even hit min spend
+    if (ch.rampWeeks > timeline + 2) return false;                  // can't deliver in time
+    return true;
+  });
+
+  // ---- Step 2: score ----
+  const scored = eligible.map(ch => {
+    const fitScore =
+      ch.fit.audience[audience] *
+      ch.fit.goal[goal] *
+      ch.fit.industry[industry];
+
+    // Strength boost (multiplicative, capped)
+    let strengthBoost = 1.0;
+    strengths.forEach(s => {
+      const map = STRENGTH_BOOST[s];
+      if (map && map[ch.slug]) strengthBoost *= map[ch.slug];
+    });
+    strengthBoost = Math.min(strengthBoost, 1.5);
+
+    // Timeline fit: penalty if rampWeeks close to timeline
+    const slack = timeline - ch.rampWeeks;
+    const timelineFit = slack >= 4 ? 1.0 : slack >= 0 ? 0.7 : 0.3;
+
+    // CPL efficiency — dampened range [0.7, 1.3] so it informs but doesn't dominate.
+    // High CPL channels (conferences, sponsorships) shouldn't be punished too hard
+    // when they're the right strategic call.
+    const cplScore = ch.cpl
+      ? Math.max(0.7, Math.min(1.3, 300 / ch.cpl))
+      : 1.0;
+
+    // Primary-play boost: when a channel has near-perfect fit for the user's
+    // chosen goal AND a reasonable overall fit, give it a 40% lift. The fitScore
+    // gate prevents B2B-heavy channels from dominating a B2C-retail mix just
+    // because their goal scoring is high.
+    const primaryBoost = (ch.fit.goal[goal] >= 0.95 && fitScore >= 0.35) ? 1.4 : 1.0;
+
+    const score = fitScore * strengthBoost * cplScore * timelineFit * primaryBoost;
+
+    return { channel: ch, score, fitScore, strengthBoost, timelineFit, cplScore, primaryBoost };
+  });
+
+  // Drop very low fit — anything scoring under 0.15 isn't worth a serious recommendation
+  const viable = scored.filter(s => s.score > 0.15).sort((a, b) => b.score - a.score);
+  if (viable.length === 0) return null;
+
+  // ---- Step 3: allocate ----
+  // Initial proportional split by score
+  const totalScore = viable.reduce((s, v) => s + v.score, 0);
+  let allocations = viable.map(v => {
+    const share = v.score / totalScore;
+    return {
+      ...v,
+      target: share * budget,
+      allocation: 0
+    };
+  });
+
+  // Apply min-spend and max-share constraints in two clean passes.
+  //
+  // Pass A — caps. Iteratively detect channels whose proportional share
+  // would exceed their concentration cap; lock them at cap; redistribute
+  // remaining budget among the rest. Repeat until no further caps trigger.
+  //
+  // Pass B — floors. Among remaining channels, drop the one with the lowest
+  // score that falls below its min-spend floor. Redistribute. Repeat until
+  // all remaining channels clear their floors.
+  let active = allocations.map(a => ({ ...a, locked: false }));
+
+  // --- Pass A: caps ---
+  for (let iter = 0; iter < 12; iter++) {
+    const unlocked = active.filter(a => !a.locked);
+    if (unlocked.length === 0) break;
+
+    const lockedSum = active.filter(a => a.locked).reduce((s, a) => s + a.allocation, 0);
+    const remainBudget = budget - lockedSum;
+    const unlockedScoreSum = unlocked.reduce((s, a) => s + a.score, 0);
+    if (unlockedScoreSum === 0) break;
+
+    let didLock = false;
+    unlocked.forEach(a => {
+      const proportional = (a.score / unlockedScoreSum) * remainBudget;
+      const cap = budget * a.channel.maxShare;
+      if (proportional >= cap) {
+        a.allocation = cap;
+        a.locked = true;
+        didLock = true;
+      } else {
+        a.allocation = proportional;
+      }
+    });
+    if (!didLock) break;
+  }
+
+  // --- Pass B: floors ---
+  let droppedAny = true;
+  let safety = 0;
+  while (droppedAny && safety++ < 20) {
+    droppedAny = false;
+    const unlocked = active.filter(a => !a.locked);
+    if (unlocked.length === 0) break;
+
+    const lockedSum = active.filter(a => a.locked).reduce((s, a) => s + a.allocation, 0);
+    const remainBudget = budget - lockedSum;
+    const unlockedScoreSum = unlocked.reduce((s, a) => s + a.score, 0);
+    if (unlockedScoreSum === 0) break;
+
+    // Find the lowest-score channel that falls below its floor; drop it
+    let toDrop = null;
+    unlocked.forEach(a => {
+      const proportional = (a.score / unlockedScoreSum) * remainBudget;
+      if (proportional < a.channel.minSpend) {
+        if (!toDrop || a.score < toDrop.score) toDrop = a;
+      }
+    });
+
+    if (toDrop) {
+      toDrop.allocation = 0;
+      toDrop.locked = true;
+      toDrop.dropped = true;
+      droppedAny = true;
+    } else {
+      // All remaining channels clear their floors — finalise shares
+      unlocked.forEach(a => {
+        a.allocation = (a.score / unlockedScoreSum) * remainBudget;
+      });
+    }
+  }
+
+  // Filter out dropped
+  let final = active.filter(a => a.allocation > 0).sort((a, b) => b.allocation - a.allocation);
+
+  // ---- Step 4: project leads (with diminishing returns) ----
+  final = final.map(a => {
+    if (!a.channel.cpl) {
+      return { ...a, leads: 0, effectiveCpl: null };
+    }
+    // Diminishing returns: leads = sqrt(allocation / minSpend) × (minSpend / cpl)
+    // i.e. at minSpend → 1× baseline; at 4× minSpend → 2× leads
+    const baseline = a.channel.minSpend / a.channel.cpl;
+    const ratio = a.allocation / a.channel.minSpend;
+    const leads = Math.round(baseline * Math.sqrt(ratio));
+    const effectiveCpl = leads > 0 ? Math.round(a.allocation / leads) : null;
+    return { ...a, leads, effectiveCpl };
+  });
+
+  return final;
+}
+
+/* =============================================================
+   RATIONALE GENERATOR
+   Builds a 1–2 sentence explanation per channel.
+   ============================================================= */
+function generateRationale(item, inputs) {
+  const { audience, goal, industry, timeline } = inputs;
+  const ch = item.channel;
+  const reasons = [];
+
+  // 1. Why the high (or low) fit?
+  const audMap = { b2b: 'B2B', mixed: 'mixed', b2c: 'B2C' };
+  const goalMap = { leadgen: 'lead generation', brand: 'brand awareness', event: 'an event push', retention: 'client retention' };
+  const indMap = {
+    offshore: 'offshore services', industrial: 'industrial services',
+    prof_services: 'professional services', tech: 'technology', retail: 'retail'
+  };
+
+  if (item.primaryBoost > 1.0) {
+    reasons.push(`Primary play for ${goalMap[goal]} — this is what this channel is built for.`);
+  } else if (item.fitScore >= 0.7) {
+    reasons.push(`Strong fit for ${audMap[audience]} ${goalMap[goal]} in ${indMap[industry]}.`);
+  } else if (item.fitScore >= 0.4) {
+    reasons.push(`Solid secondary fit — useful as part of the mix rather than as a primary play.`);
+  } else {
+    reasons.push(`Lower direct fit but allocated for diversification.`);
+  }
+
+  // 2. Strength boost?
+  if (item.strengthBoost > 1.05) {
+    const pct = Math.round((item.strengthBoost - 1) * 100);
+    reasons.push(`Boosted ${pct}% because you already have relevant strengths in place.`);
+  }
+
+  // 3. Timeline?
+  if (item.timelineFit < 1.0) {
+    reasons.push(`Note: ${ch.rampWeeks}-week ramp time is tight for your ${timeline}-week window — start immediately.`);
+  }
+
+  // 4. Cap?
+  if (item.locked && item.allocation === ch.maxShare * inputs.budget) {
+    reasons.push(`Capped at ${Math.round(ch.maxShare * 100)}% of budget to avoid over-concentration.`);
+  }
+
+  // 5. Enabler nuance
+  if (ch.isEnabler) {
+    reasons.push(`Indirect: multiplies the effectiveness of other channels, but won't generate leads on its own.`);
+  }
+
+  return reasons.join(' ');
+}
+
+/* =============================================================
+   ROADMAP GENERATOR
+   Builds a 90-day execution plan grouped into 4 phases.
+   ============================================================= */
+function generateRoadmap(allocations, inputs) {
+  if (!allocations || allocations.length === 0) return [];
+
+  const week1to2 = [];
+  const week3to6 = [];
+  const week7to12 = [];
+  const ongoing = [];
+
+  // Universal openers
+  week1to2.push('Set up tracking: UTM scheme, lead-source field in CRM, weekly reporting cadence.');
+  week1to2.push('Finalise positioning statement and three core value props with the leadership team.');
+
+  allocations.forEach(a => {
+    const ch = a.channel;
+    if (ch.slug === 'capability') {
+      week1to2.push(`Brief designer on capability statement and tender cover collateral (this multiplies every other channel).`);
+    } else if (ch.slug === 'linkedin_ads') {
+      week1to2.push(`Set up LinkedIn campaign manager, build 2 audiences (one persona-led, one industry-led), draft 4 ad variants.`);
+      week3to6.push(`Optimise LinkedIn ads on CPL — pause bottom quartile, double down on top performers.`);
+    } else if (ch.slug === 'google_ads') {
+      week1to2.push(`Launch Google Search Ads on 8–10 high-intent commercial keywords; install conversion tracking.`);
+    } else if (ch.slug === 'email') {
+      week3to6.push(`Build 4-step nurture sequence in the CRM and segment list by buyer stage.`);
+    } else if (ch.slug === 'content') {
+      week3to6.push(`Publish 2 cornerstone technical articles and 4 supporting pieces; submit XML sitemap.`);
+      ongoing.push('Maintain weekly content cadence; refresh top-3 posts quarterly.');
+    } else if (ch.slug === 'webinar') {
+      week3to6.push(`Schedule webinar #1 for week 6: speaker confirmed, landing page live, 3-week promotion runway.`);
+    } else if (ch.slug === 'abm') {
+      week3to6.push(`Lock target account list (20–40 accounts), assign owners, build bespoke value-prop deck per account.`);
+    } else if (ch.slug === 'trade_pub') {
+      week3to6.push(`Book quarterly trade-pub insertions; brief in-house copy and creative.`);
+    } else if (ch.slug === 'direct_mail') {
+      week7to12.push(`Send executive direct-mail pack to top accounts; follow up by phone within 5 working days.`);
+    } else if (ch.slug === 'conference') {
+      week7to12.push(`Lock booth design, staff schedule, lead-capture form, and pre-show appointment outreach.`);
+    } else if (ch.slug === 'pr') {
+      week3to6.push(`Engage PR firm; agree first story angle and pitch list of 8 priority outlets.`);
+    } else if (ch.slug === 'sponsorship') {
+      week3to6.push(`Confirm sponsorship tier; lock speaking slot, logo placements, and member-list access.`);
+    }
+  });
+
+  ongoing.push('Weekly lead-source review; monthly budget reforecast against actual CPL.');
+  ongoing.push('Quarterly: revisit allocation against actuals — channels exceeding 1.5× target CPL get reallocated.');
+
+  return [
+    { weeks: 'Wk 1–2',  phase: 'Set Up',       actions: week1to2 },
+    { weeks: 'Wk 3–6',  phase: 'Build',        actions: week3to6 },
+    { weeks: 'Wk 7–12', phase: 'Execute',      actions: week7to12 },
+    { weeks: 'Beyond',  phase: 'Iterate',      actions: ongoing }
+  ].filter(p => p.actions.length > 0);
+}
+
+/* =============================================================
+   FORMATTERS
+   ============================================================= */
+const fmtAUD = (n) => '$' + Math.round(n).toLocaleString('en-AU');
+const fmtAUDShort = (n) => {
+  if (n >= 1000000) return '$' + (n/1000000).toFixed(1) + 'M';
+  if (n >= 1000) return '$' + Math.round(n/1000) + 'k';
+  return '$' + Math.round(n);
+};
+const fmtPct = (n) => Math.round(n * 100) + '%';
+
+/* =============================================================
+   RENDER
+   ============================================================= */
+function readInputs() {
+  return {
+    budget: parseInt(document.getElementById('budget').value),
+    audience: document.querySelector('input[name="audience"]:checked').value,
+    goal: document.querySelector('input[name="goal"]:checked').value,
+    industry: document.getElementById('industry').value,
+    timeline: parseInt(document.getElementById('timeline').value),
+    strengths: Array.from(document.querySelectorAll('#strengths input:checked')).map(el => el.value)
+  };
+}
+
+function render() {
+  const inputs = readInputs();
+
+  // Update sidebar displays
+  document.getElementById('budgetDisplay').textContent = fmtAUD(inputs.budget);
+  document.getElementById('timelineDisplay').textContent = inputs.timeline + ' weeks';
+
+  const allocations = computeAllocation(inputs);
+  const out = document.getElementById('output');
+
+  if (!allocations || allocations.length === 0) {
+    out.innerHTML = `
+      <div class="empty-state">
+        <div class="big">No viable channel mix</div>
+        Budget is too low for any channel given the timeline and inputs.<br>
+        Try increasing budget or extending the timeline.
+      </div>`;
+    return;
+  }
+
+  // Sensitivity: recompute with 2× budget
+  const sensitivityHigh = computeAllocation({ ...inputs, budget: inputs.budget * 2 });
+  const sensitivityLow  = computeAllocation({ ...inputs, budget: Math.max(5000, inputs.budget * 0.5) });
+
+  const totalAllocated = allocations.reduce((s, a) => s + a.allocation, 0);
+  const unallocated = inputs.budget - totalAllocated;
+  const unallocatedPct = unallocated / inputs.budget;
+  const totalLeads = allocations.reduce((s, a) => s + (a.leads || 0), 0);
+  const blendedCpl = totalLeads > 0 ? Math.round(totalAllocated / totalLeads) : null;
+  // Pipeline projection: typical B2B services assumption is
+  // $20k average contract value × 8% close rate from qualified lead → $1,600 expected
+  // pipeline value per lead. We label this "Pipeline ROI" to distinguish from
+  // realised-revenue ROI, which would require tracking cash collected.
+  const avgContract = 20000;
+  const closeRate = 0.08;
+  const expValue = totalLeads * avgContract * closeRate;
+  const roi = totalAllocated > 0 ? ((expValue - totalAllocated) / totalAllocated) : 0;
+
+  const roadmap = generateRoadmap(allocations, inputs);
+
+  // ---------- BUILD HTML ----------
+  let html = '';
+
+  // KPI strip
+  html += `
+    <h2 class="section-title">Recommended Mix <span class="meta">${allocations.length} channels · ${inputs.timeline}-week horizon</span></h2>
+    <div class="kpi-strip">
+      <div class="kpi">
+        <div class="kpi-label">Total Allocated</div>
+        <div class="kpi-value">${fmtAUDShort(totalAllocated)}</div>
+        <div class="kpi-sub">${unallocatedPct > 0.10 ? fmtAUDShort(unallocated) + ' unallocated headroom' : 'of $' + (inputs.budget/1000).toFixed(0) + 'k budget'}</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Projected Qualified Leads</div>
+        <div class="kpi-value">${totalLeads}</div>
+        <div class="kpi-sub">across ${allocations.filter(a => a.leads > 0).length} lead-generating channels</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Blended CPL</div>
+        <div class="kpi-value">${blendedCpl ? '$' + blendedCpl : '—'}</div>
+        <div class="kpi-sub">${blendedCpl ? 'cost per qualified lead' : 'no direct-lead channels'}</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Projected Pipeline ROI</div>
+        <div class="kpi-value">${roi >= 0 ? '+' : ''}${Math.round(roi*100)}%</div>
+        <div class="kpi-sub">assumes $20k contract × 8% close rate</div>
+      </div>
+    </div>
+  `;
+
+  // Mix bar
+  html += `
+    <h2 class="section-title">Channel Mix <span class="meta">Hover a segment for detail</span></h2>
+    <div class="mix-bar-wrap">
+      <div class="mix-bar">`;
+  allocations.forEach(a => {
+    const pct = (a.allocation / totalAllocated) * 100;
+    html += `<div class="mix-seg" style="width:${pct}%; background:${a.channel.colour};" title="${a.channel.name}: ${fmtAUD(a.allocation)} (${pct.toFixed(1)}%)">${pct >= 6 ? Math.round(pct) + '%' : ''}</div>`;
+  });
+  html += `</div>
+      <div class="mix-legend">`;
+  allocations.forEach(a => {
+    html += `<div class="mix-legend-item"><span class="mix-legend-swatch" style="background:${a.channel.colour}"></span>${a.channel.name}</div>`;
+  });
+  html += `</div>
+    </div>
+  `;
+
+  // Headroom advisory — if more than 10% of budget couldn't be allocated
+  if (unallocatedPct > 0.10) {
+    html += `
+      <div style="border: 1px solid var(--coral); background: var(--sand); padding: 14px 18px; margin-bottom: 4px; display: flex; gap: 16px; align-items: start;">
+        <div style="font-family: var(--serif); font-size: 24px; color: var(--coral); font-weight: 700; line-height: 1;">!</div>
+        <div>
+          <div style="font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--coral); font-weight: 700; margin-bottom: 4px;">${fmtAUDShort(unallocated)} unallocated (${Math.round(unallocatedPct * 100)}%)</div>
+          <div style="font-family: var(--serif); font-size: 13px; color: var(--ink); line-height: 1.5;">
+            With your current inputs, only ${fmtAUDShort(totalAllocated)} can be productively deployed across viable channels. The remaining ${fmtAUDShort(unallocated)} would push channels past the point of diminishing returns. <strong style="font-family: var(--sans); font-size: 12px;">Recommendations:</strong> reserve the headroom for follow-on activity in the next quarter, or extend the timeline to unlock slower-ramping channels (content, conferences, PR).
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Channels (detail cards)
+  html += `<h2 class="section-title">Allocation Detail <span class="meta">Ranked by spend</span></h2><div class="channels">`;
+  allocations.forEach((a, idx) => {
+    const ch = a.channel;
+    const pct = (a.allocation / totalAllocated) * 100;
+    const rationale = generateRationale(a, inputs);
+    const cplLabel = a.effectiveCpl ? `<strong>CPL:</strong> $${a.effectiveCpl}` : (ch.isEnabler ? '<strong>Enabler</strong>' : '');
+    const leadsLabel = a.leads > 0 ? `<strong>Leads:</strong> ~${a.leads} qualified` : (ch.isEnabler ? 'No direct leads' : '');
+
+    html += `
+      <div class="channel-card">
+        <div class="channel-rank">${(idx + 1).toString().padStart(2, '0')}</div>
+        <div>
+          <div class="channel-name">${ch.name}</div>
+          <div class="channel-meta" style="margin-top:4px">${ch.summary}</div>
+          <div style="margin-top:8px">
+            <span class="channel-tag">${ch.rampWeeks}-wk ramp</span>
+            ${leadsLabel ? `<span class="channel-tag" style="background:transparent;border:0;padding:0;font-family:var(--sans);color:var(--ink-3);font-size:10.5px;text-transform:none;letter-spacing:0">${leadsLabel}</span>` : ''}
+            ${cplLabel ? `<span class="channel-tag" style="background:transparent;border:0;padding:0 0 0 8px;font-family:var(--sans);color:var(--ink-3);font-size:10.5px;text-transform:none;letter-spacing:0">${cplLabel}</span>` : ''}
+          </div>
+        </div>
+        <div class="channel-alloc">
+          <div class="channel-alloc-amount">${fmtAUDShort(a.allocation)}</div>
+          <div class="channel-alloc-pct">${pct.toFixed(1)}% of mix</div>
+        </div>
+        <div class="channel-rationale">${rationale}</div>
+      </div>
+    `;
+  });
+  html += `</div>`;
+
+  // Roadmap
+  if (roadmap.length > 0) {
+    html += `<h2 class="section-title">90-Day Execution Roadmap <span class="meta">What to do, in what order</span></h2><div class="roadmap">`;
+    roadmap.forEach(p => {
+      html += `
+        <div class="roadmap-row">
+          <div class="roadmap-phase">
+            ${p.phase}
+            <div class="weeks">${p.weeks}</div>
+          </div>
+          <ul class="roadmap-actions">${p.actions.map(a => `<li>${a}</li>`).join('')}</ul>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Sensitivity
+  if (sensitivityHigh || sensitivityLow) {
+    const sumHigh = sensitivityHigh ? sensitivityHigh.reduce((s, a) => s + a.allocation, 0) : 0;
+    const leadsHigh = sensitivityHigh ? sensitivityHigh.reduce((s, a) => s + (a.leads || 0), 0) : 0;
+    const sumLow  = sensitivityLow  ? sensitivityLow.reduce((s, a) => s + a.allocation, 0)  : 0;
+    const leadsLow = sensitivityLow ? sensitivityLow.reduce((s, a) => s + (a.leads || 0), 0) : 0;
+
+    // Find biggest moves (channels that grew most when budget doubled)
+    let biggestMove = '';
+    if (sensitivityHigh) {
+      const baseMap = {};
+      allocations.forEach(a => baseMap[a.channel.slug] = a.allocation);
+      const moves = sensitivityHigh.map(a => ({
+        name: a.channel.name,
+        delta: a.allocation - (baseMap[a.channel.slug] || 0)
+      })).sort((a, b) => b.delta - a.delta);
+      if (moves[0] && moves[0].delta > 1000) {
+        biggestMove = `Most of the extra budget would flow to <span class="num">${moves[0].name}</span>${moves[1] && moves[1].delta > 1000 ? ` and <span class="num">${moves[1].name}</span>` : ''}.`;
+      }
+    }
+
+    html += `<h2 class="section-title" style="border-color:var(--ink-2)">Sensitivity <span class="meta">What changes if the budget moves</span></h2>`;
+    html += `<div class="sensitivity">
+      <div class="sens-block">
+        <div class="sens-label">If budget doubled to ${fmtAUDShort(inputs.budget * 2)}</div>
+        <div class="sens-headline">~${leadsHigh} qualified leads (+${totalLeads > 0 ? Math.round((leadsHigh/totalLeads - 1) * 100) : 0}%)</div>
+        <div class="sens-detail">Diminishing returns kick in — doubling the budget does <strong>not</strong> double the leads. ${biggestMove}</div>
+      </div>
+      <div class="sens-block">
+        <div class="sens-label">If budget halved to ${fmtAUDShort(Math.max(5000, inputs.budget * 0.5))}</div>
+        <div class="sens-headline">~${leadsLow} qualified leads (${totalLeads > 0 ? (leadsLow/totalLeads < 1 ? '−' : '+') + Math.abs(Math.round((leadsLow/totalLeads - 1) * 100)) : '—'}%)</div>
+        <div class="sens-detail">Smaller budgets force consolidation. Channels with high minimum spends (e.g. conferences, sponsorships) typically drop out first.</div>
+      </div>
+    </div>`;
+  }
+
+  // Footer note
+  html += `
+    <div class="footer-note">
+      <strong>How this is calculated.</strong>
+      Channels are scored against fit (audience × goal × industry, each 0–1), then adjusted for your declared strengths,
+      timeline feasibility, and cost-per-lead efficiency. Budget is allocated proportionally by score with per-channel
+      minimum spends and concentration caps (no single channel exceeds its <em>maxShare</em>). Leads are projected on a
+      diminishing-returns curve: <span style="font-family:var(--mono);font-size:10.5px">leads = √(spend / minSpend) × (minSpend / CPL)</span>.
+      ROI assumes an average B2B contract of $20,000 at an 8% close rate from qualified lead — change these in the source code if your unit
+      economics differ. "Pipeline ROI" is the projected pipeline value divided by spend, not realised cash returned.
+      <br><br>
+      <strong>Limitations.</strong>
+      Real marketing performance is messy — these projections are planning estimates, not forecasts. CPL benchmarks
+      reflect typical Australian-market ranges; your actuals will vary by sector, brand maturity, and execution quality.
+      The model assumes no interaction effects between channels (in reality, conferences amplify LinkedIn, content amplifies SEO,
+      etc.), and treats every projected lead as equally valuable.
+    </div>
+  `;
+
+  out.innerHTML = html;
+}
+
+/* =============================================================
+   WIRE UP
+   ============================================================= */
+['budget', 'timeline', 'industry'].forEach(id => {
+  document.getElementById(id).addEventListener('input', render);
+});
+document.querySelectorAll('input[name="audience"], input[name="goal"]').forEach(el => {
+  el.addEventListener('change', render);
+});
+document.querySelectorAll('#strengths input').forEach(el => {
+  el.addEventListener('change', render);
+});
+
+// Initial render
+render();
+</script>
+</body>
+</html>
