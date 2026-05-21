@@ -1,6 +1,6 @@
 # Commercial & Marketing Portfolio
 
-A small collection of self-initiated marketing pieces produced as application material for the **Fugro Vacation Student — Commercial & Marketing (2026/27)** program.
+A small collection of self-initiated marketing pieces produced for fictional Perth-based offshore-services companies — exploring how a small B2B marketing team produces collateral, runs campaigns, and plans events.
 
 **Author** — Mohammed Habibur Rahman Bhuyan Abir ("Abir")
 **Studying** — Bachelor of Information Technology (Business Information Systems), Murdoch University · graduating November 2026
@@ -11,8 +11,11 @@ A small collection of self-initiated marketing pieces produced as application ma
 
 ---
 
+## Why this portfolio exists
 
-Each project is **fictional but industry-realistic**. The companies don't exist; the service lines, document formats, basin names, conference details, and budget structures are drawn from publicly available material about how the Australian subsea sector operates. The goal is to demonstrate I understand the deliverables, not to pretend prior experience.
+I'm a final-year Business Information Systems student with a working interest in commercial and marketing work in the offshore-services industry. My degree is technical, but the work I do day-to-day — running a Perth service franchise — is commercial: quoting, client communication, marketing collateral, social campaigns, CRM. This repository is where I explore the kinds of deliverables a small B2B marketing team in this sector actually produces.
+
+Each project is **fictional but industry-realistic**. The companies don't exist; the service lines, document formats, basin names, conference details, and budget structures are drawn from publicly available material about how the Australian subsea sector operates. The goal is to learn the deliverables by producing them — not to pretend prior experience.
 
 The four projects sit in a single connected brand world (Subsea Solutions and Meridian Offshore — Perth-based subsea integrity services) so the portfolio reads as one coherent body of work, not four disconnected one-offs.
 
@@ -22,7 +25,7 @@ The four projects sit in a single connected brand world (Subsea Solutions and Me
 
 | # | Project | Type | Format |
 |---|---|---|---|
-| 01 | Capability One-Pager | Fully marketing | A4 PDF + HTML source |
+| 01 | Capability One-Pager | Marketing | A4 PDF + HTML source |
 | 02 | AOG 2026 Conference Activation Plan | Marketing | PowerPoint deck + 1-page brief |
 | 03 | LinkedIn B2B Campaign — *The Deeper Standard* | Marketing | 5 designed PDFs (campaign brief, brand + ads, calendar, email sequence, post pack) |
 | 04 | Marketing Mix Optimiser | IT-to-Marketing | Interactive offline web app |
